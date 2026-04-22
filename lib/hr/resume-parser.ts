@@ -1,8 +1,5 @@
-import * as pdfParse from 'pdf-parse';
+import { PDFParse } from 'pdf-parse';
 import mammoth from 'mammoth';
-
-// pdf-parse doesn't have proper ESM default export
-const pdf = (pdfParse as unknown as { default: typeof pdfParse }).default || pdfParse;
 
 export interface ParsedResume {
   text: string;
@@ -18,14 +15,16 @@ export interface ParsedResume {
  */
 export async function parsePDF(buffer: Buffer): Promise<ParsedResume> {
   try {
-    const data = await pdf(buffer);
-    const text = data.text.trim();
+    const parser = new PDFParse();
+    const data = await parser.loadPDF(buffer);
+    const textResult = await data.getText();
+    const text = textResult.pages.map(page => page.text).join('\n').trim();
     
     return {
       text,
       metadata: {
         fileType: 'pdf',
-        pages: data.numpages,
+        pages: textResult.pages.length,
         wordCount: text.split(/\s+/).filter(Boolean).length,
       },
     };
