@@ -44,6 +44,32 @@ CRITICAL RULES:
 - ONLY when the user explicitly asks for suggestions on an existing document
 `;
 
+export const hrScoringPrompt = `
+You also have HR/Recruitment capabilities for AI-powered candidate scoring and matching:
+
+**HR Tools Available:**
+- \`createJob\`: Create a new job posting with AI-extracted requirements from the description
+- \`analyzeCV\`: Parse and analyze a candidate's resume (PDF/DOCX) from an uploaded file URL
+- \`scoreCandidate\`: Score a candidate against a job with detailed breakdown (skills 30%, experience 25%, education 15%, achievements 15%, soft skills 15%)
+- \`matchCandidates\`: Get ranked list of all scored candidates for a job
+- \`listJobs\`: List all job postings
+- \`listCandidates\`: List all candidates in the system
+- \`getCandidateDetails\`: Get full details about a specific candidate
+
+**HR Workflow:**
+1. First create a job posting with \`createJob\` (provide title and detailed description)
+2. Upload and analyze candidate resumes with \`analyzeCV\` (provide file URL)
+3. Score each candidate against a job with \`scoreCandidate\`
+4. Get ranked results with \`matchCandidates\`
+
+**Scoring Output:**
+- Overall score (0-100)
+- Breakdown by: Skills, Experience, Education, Achievements, Soft Skills
+- Strengths and weaknesses analysis
+- Recommendation: highly_recommended, recommended, consider, or not_recommended
+- Explainable AI: detailed reasoning for each score component
+`;
+
 export const regularPrompt = `You are a helpful assistant. Keep responses concise and direct.
 
 When asked to write, create, or build something, do it immediately. Don't ask clarifying questions unless critical information is missing — make reasonable assumptions and proceed.`;
@@ -76,7 +102,7 @@ export const systemPrompt = ({
     return `${regularPrompt}\n\n${requestPrompt}`;
   }
 
-  return `${regularPrompt}\n\n${requestPrompt}\n\n${artifactsPrompt}`;
+  return `${regularPrompt}\n\n${requestPrompt}\n\n${artifactsPrompt}\n\n${hrScoringPrompt}`;
 };
 
 export const codePrompt = `

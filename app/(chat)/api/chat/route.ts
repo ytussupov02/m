@@ -23,6 +23,15 @@ import { getLanguageModel } from "@/lib/ai/providers";
 import { createDocument } from "@/lib/ai/tools/create-document";
 import { editDocument } from "@/lib/ai/tools/edit-document";
 import { getWeather } from "@/lib/ai/tools/get-weather";
+import {
+  createJobTool,
+  analyzeCVTool,
+  scoreCandidateTool,
+  matchCandidatesTool,
+  listJobsTool,
+  getCandidateDetailsTool,
+  listCandidatesTool,
+} from "@/lib/ai/tools/hr-tools";
 import { requestSuggestions } from "@/lib/ai/tools/request-suggestions";
 import { updateDocument } from "@/lib/ai/tools/update-document";
 import { isProductionEnvironment } from "@/lib/constants";
@@ -205,6 +214,13 @@ export async function POST(request: Request) {
                   "editDocument",
                   "updateDocument",
                   "requestSuggestions",
+                  "createJob",
+                  "analyzeCV",
+                  "scoreCandidate",
+                  "matchCandidates",
+                  "listJobs",
+                  "getCandidateDetails",
+                  "listCandidates",
                 ],
           providerOptions: {
             ...(modelConfig?.gatewayOrder && {
@@ -228,6 +244,42 @@ export async function POST(request: Request) {
               modelId: chatModel,
             }),
             requestSuggestions: requestSuggestions({
+              session,
+              dataStream,
+              modelId: chatModel,
+            }),
+            // HR/Candidate Scoring Tools
+            createJob: createJobTool({
+              session,
+              dataStream,
+              modelId: chatModel,
+            }),
+            analyzeCV: analyzeCVTool({
+              session,
+              dataStream,
+              modelId: chatModel,
+            }),
+            scoreCandidate: scoreCandidateTool({
+              session,
+              dataStream,
+              modelId: chatModel,
+            }),
+            matchCandidates: matchCandidatesTool({
+              session,
+              dataStream,
+              modelId: chatModel,
+            }),
+            listJobs: listJobsTool({
+              session,
+              dataStream,
+              modelId: chatModel,
+            }),
+            getCandidateDetails: getCandidateDetailsTool({
+              session,
+              dataStream,
+              modelId: chatModel,
+            }),
+            listCandidates: listCandidatesTool({
               session,
               dataStream,
               modelId: chatModel,
