@@ -1,5 +1,8 @@
-import pdf from 'pdf-parse';
+import * as pdfParse from 'pdf-parse';
 import mammoth from 'mammoth';
+
+// pdf-parse doesn't have proper ESM default export
+const pdf = (pdfParse as unknown as { default: typeof pdfParse }).default || pdfParse;
 
 export interface ParsedResume {
   text: string;
